@@ -1,0 +1,14 @@
+{
+  "name": "frontend",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "vite",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "burkeholland.simple-react-snippets",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}

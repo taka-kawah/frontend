@@ -1,7 +1,6 @@
 export const cautions = {
   email: "メールアドレスが不正です。",
-  password:
-    "最低8文字、1つ以上の大文字、1つ以上の数字を含むパスワードを入力してください。",
+  password: "パスワードが不正です。",
 };
 
 export function isValidEmail(subject: string): boolean {

@@ -1,10 +1,10 @@
-import { SignInForms } from "./Components/SignIn/AccountForms";
+import { AccountModal } from "./Components/SignIn/AccpuntModal";
 
 function App() {
   return (
-    <>
-      <SignInForms />
-    </>
+    <div className="bg-gray-200 flex justify-center py-5">
+      <AccountModal needsSign={true} />
+    </div>
   );
 }
 

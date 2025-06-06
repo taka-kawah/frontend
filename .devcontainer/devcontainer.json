@@ -7,7 +7,9 @@
     "vscode": {
       "extensions": [
         "burkeholland.simple-react-snippets",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "austenc.tailwind-docs"
       ]
     }
   }

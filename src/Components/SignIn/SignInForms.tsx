@@ -1,6 +1,7 @@
 import React, { useState, type JSX } from "react";
 import "../../App.css";
 import { cautions, isValidEmail, isValidPassword } from "./validation";
+import { useSendEmailAndPassword } from "../../http_parts/SignInSignUpHooks";
 
 export function SignInForms(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -13,7 +14,11 @@ export function SignInForms(): JSX.Element {
     setPassword(event.target.value);
   };
 
-  console.log(email + password);
+  const { sendEmailAndPassword, error, loading } = useSendEmailAndPassword();
+  const handleLogin = () => {
+    sendEmailAndPassword(email, password);
+  };
+
   return (
     <div id="email-pass-signin" className="space-y-12 bg-cyan-100 rounded-4xl">
       <p
@@ -23,12 +28,11 @@ export function SignInForms(): JSX.Element {
         メールアドレスでログイン
       </p>
       <div id="forms" className="space-y-6">
-        <div className="space-y-2 p-8">
+        <div id="emailForm" className="space-y-2 p-8">
           <label className="block tracking-wide text-base text-gray-600">
             メールアドレス
           </label>
           <input
-            id="email"
             type="email"
             required
             className={`bg-white w-80 h-13 border-2 ${isValidEmail(email) ? "border-cyan-500/50 transition delay-50 hover:border-blue-500/50 focus:border-blue-500/50" : "border-red-500/50"} rounded`}
@@ -40,7 +44,7 @@ export function SignInForms(): JSX.Element {
             {isValidEmail(email) ? "" : cautions.email}
           </p>
         </div>
-        <div className="space-y-2 p-8">
+        <div id="passwordForm" className="space-y-2 p-8">
           <label className="block tracking-wide text-base text-gray-600">
             パスワード
           </label>
@@ -48,7 +52,6 @@ export function SignInForms(): JSX.Element {
             最低8文字、1つ以上の大文字、1つ以上の数字を含むパスワードを入力してください。
           </p>
           <input
-            id="password"
             type="password"
             required
             className={`bg-white w-80 h-13 border-2 ${isValidPassword(password) ? "border-cyan-500/50 transition delay-50 hover:border-blue-500/50 focus:border-blue-500/50" : "border-red-500/50"} rounded focus:placeholder-transparent`}
@@ -61,19 +64,31 @@ export function SignInForms(): JSX.Element {
           </p>
         </div>
       </div>
+      <div
+        id="errorMassage"
+        className="text-red-500 h-5 text-2xl flex justify-center"
+      >
+        <p>{error ? `⚠️${error.message}` : ""}</p>
+      </div>
       <div className="flex justify-center items-end pb-8">
-        <button
-          className="bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl transition delay-150 duration-200 hover:bg-blue-500 hover:scale-110 disabled:bg-blue-300"
-          onClick={() => console.log("login!", email, password)}
-          disabled={
-            !isValidEmail(email) ||
-            !isValidPassword(password) ||
-            email === "" ||
-            password === ""
-          }
-        >
-          ログイン
-        </button>
+        {loading ? (
+          <div className="flex justify-center" id="loading">
+            <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+          </div>
+        ) : (
+          <button
+            className="bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl transition delay-150 duration-200 hover:bg-blue-500 hover:scale-110 disabled:bg-blue-300"
+            onClick={handleLogin}
+            disabled={
+              !isValidEmail(email) ||
+              !isValidPassword(password) ||
+              email === "" ||
+              password === ""
+            }
+          >
+            ログイン
+          </button>
+        )}
       </div>
     </div>
   );

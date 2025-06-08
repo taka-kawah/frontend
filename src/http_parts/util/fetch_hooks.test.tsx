@@ -106,6 +106,37 @@ describe("useHttpPost", () => {
     expect(result.current.error).toBeNull();
   });
 
+  test("正常系: fetch成功、レスポンスにAuthorizationヘッダあり", async () => {
+    const schema = z.object({ id: z.number(), name: z.string() }).strict();
+    type User = z.infer<typeof schema>;
+    const data: User = { id: 1, name: "taro" };
+
+    const header = new Headers({ Authorization: "Bearer test-token" });
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => data,
+      headers: header,
+    });
+
+    const { useHttpPost } = await import("./fetch_hooks");
+    const { result } = renderHook(() =>
+      useHttpPost("example.com", "/user", payload, schema)
+    );
+
+    expect(result.current.loading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+
+    expect(result.current.data).toEqual(data);
+    expect(result.current.error).toBeNull();
+    expect(result.current.resHeader).not.toBeNull();
+    expect(result.current.resHeader?.get("Authorization")).toBe(
+      "Bearer test-token"
+    );
+  });
+
   test("異常系: fetch成功、データ型不一致", async () => {
     const schema = z.object({ id: z.number(), name: z.string() }).strict();
     const data = { id: 1, name: "taro", age: "5" };

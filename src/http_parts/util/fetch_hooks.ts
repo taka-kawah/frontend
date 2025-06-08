@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { ZodSchema } from "zod";
 
-async function httpGet(domain: string, path: string): Promise<Response> {
+async function httpGet(
+  domain: string,
+  path: string,
+  authToken?: string
+): Promise<Response> {
   console.log(`GET from: https://${domain}${path}`);
   const response = await fetch(`https://${domain}${path}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: authToken ? `Bearer ${authToken}` : "",
     },
   });
   if (!response.ok) {
@@ -20,18 +25,22 @@ async function httpGet(domain: string, path: string): Promise<Response> {
 export function useHttpGet<T>(
   domain: string,
   path: string,
-  schema: ZodSchema
-): { data: T | null; error: Error | null; loading: boolean } {
+  schema: ZodSchema,
+  authToken?: string
+) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [resHeader, setResHeader] = useState<Headers | null>(null);
 
   useEffect(() => {
     if (!domain) return;
-    httpGet(domain, path)
-      .then((response) => response.json())
+    httpGet(domain, path, authToken)
+      .then((response) => {
+        setResHeader(response.headers);
+        return response.json();
+      })
       .then((json) => {
-        console.log("Fetched JSON:", json);
         const result = schema.safeParse(json);
         if (!result.success) {
           throw result.error;
@@ -48,15 +57,21 @@ export function useHttpGet<T>(
       });
   }, [domain, path]);
 
-  return { data, error, loading };
+  return { data, error, loading, resHeader };
 }
 
-async function httpPost(domain: string, path: string, payload: any) {
+async function httpPost(
+  domain: string,
+  path: string,
+  payload: any,
+  authToken?: string
+) {
   console.log(`POST to: https://${domain}${path}`);
   const response = await fetch(`https://${domain}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: authToken ? `Bearer ${authToken}` : "",
     },
     body: JSON.stringify(payload),
   });
@@ -72,16 +87,21 @@ export function useHttpPost<T>(
   domain: string,
   path: string,
   payload: any,
-  schema: ZodSchema<T>
-): { data: T | null; error: Error | null; loading: boolean } {
+  schema: ZodSchema<T>,
+  authToken?: string
+) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [resHeader, setResHeader] = useState<Headers | null>(null);
 
   useEffect(() => {
     if (!domain) return;
-    httpPost(domain, path, payload)
-      .then((response) => response.json())
+    httpPost(domain, path, payload, authToken)
+      .then((response) => {
+        setResHeader(response.headers);
+        return response.json();
+      })
       .then((json) => {
         const result = schema.safeParse(json);
         if (!result.success) {
@@ -99,5 +119,5 @@ export function useHttpPost<T>(
       });
   }, [domain, path, payload]);
 
-  return { data, error, loading };
+  return { data, error, loading, resHeader };
 }

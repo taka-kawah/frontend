@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { z } from "zod";
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { fetchMock } from "../../vitest.setup";
+import { fetchMock } from "../../../vitest.setup";
 
 describe("useHttpGet", () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe("useHttpGet", () => {
     const data: User = { id: 1, name: "taro" };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpGet } = await import("./fetch_hooks");
+    const { useHttpGet } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpGet("example.com", "/user", schema)
     );
@@ -38,7 +38,7 @@ describe("useHttpGet", () => {
     const data = { id: 1, name: "taro", age: "5" };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpGet } = await import("./fetch_hooks");
+    const { useHttpGet } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpGet("example.com", "/user", schema)
     );
@@ -62,7 +62,7 @@ describe("useHttpGet", () => {
       json: async () => ({ message: "internal server error" }),
     });
 
-    const { useHttpGet } = await import("./fetch_hooks");
+    const { useHttpGet } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpGet("example.com", "/user", schema)
     );
@@ -91,7 +91,7 @@ describe("useHttpPost", () => {
     const data: User = { id: 1, name: "taro" };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpPost } = await import("./fetch_hooks");
+    const { useHttpPost } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpPost("example.com", "/user", payload, schema)
     );
@@ -118,7 +118,7 @@ describe("useHttpPost", () => {
       headers: header,
     });
 
-    const { useHttpPost } = await import("./fetch_hooks");
+    const { useHttpPost } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpPost("example.com", "/user", payload, schema)
     );
@@ -142,7 +142,7 @@ describe("useHttpPost", () => {
     const data = { id: 1, name: "taro", age: "5" };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpPost } = await import("./fetch_hooks");
+    const { useHttpPost } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpPost("example.com", "/user", payload, schema)
     );
@@ -166,7 +166,7 @@ describe("useHttpPost", () => {
       json: async () => ({ message: "internal server error" }),
     });
 
-    const { useHttpPost } = await import("./fetch_hooks");
+    const { useHttpPost } = await import("../fetch_hooks");
     const { result } = renderHook(() =>
       useHttpPost("example.com", "/user", payload, schema)
     );
@@ -197,7 +197,7 @@ describe("useHttpGetTrigger", () => {
       json: async () => data,
       headers: header,
     });
-    const { useHttpGetTrigger } = await import("./fetch_hooks");
+    const { useHttpGetTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpGetTrigger<User>());
 
     act(() => {
@@ -225,7 +225,7 @@ describe("useHttpGetTrigger", () => {
     const data: User = { id: 1, name: "taro" };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpGetTrigger } = await import("./fetch_hooks");
+    const { useHttpGetTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpGetTrigger<User>());
 
     act(() => {
@@ -249,7 +249,7 @@ describe("useHttpGetTrigger", () => {
     const data = { id: 1, name: "taro", age: 5 };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpGetTrigger } = await import("./fetch_hooks");
+    const { useHttpGetTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpGetTrigger<User>());
 
     act(() => {
@@ -276,7 +276,7 @@ describe("useHttpGetTrigger", () => {
       json: async () => ({ message: "internal server error" }),
     });
 
-    const { useHttpGetTrigger } = await import("./fetch_hooks");
+    const { useHttpGetTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpGetTrigger());
 
     act(() => {
@@ -313,7 +313,7 @@ describe("useHttpPostTrigger", () => {
       json: async () => data,
       headers: header,
     });
-    const { useHttpPostTrigger } = await import("./fetch_hooks");
+    const { useHttpPostTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpPostTrigger<User>());
 
     act(() => {
@@ -341,7 +341,7 @@ describe("useHttpPostTrigger", () => {
     const data: User = { id: 1, name: "taro" };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpPostTrigger } = await import("./fetch_hooks");
+    const { useHttpPostTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpPostTrigger<User>());
 
     act(() => {
@@ -365,7 +365,7 @@ describe("useHttpPostTrigger", () => {
     const data = { id: 1, name: "taro", age: 5 };
 
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => data });
-    const { useHttpPostTrigger } = await import("./fetch_hooks");
+    const { useHttpPostTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpPostTrigger<User>());
 
     act(() => {
@@ -392,7 +392,7 @@ describe("useHttpPostTrigger", () => {
       json: async () => ({ message: "internal server error" }),
     });
 
-    const { useHttpPostTrigger } = await import("./fetch_hooks");
+    const { useHttpPostTrigger } = await import("../fetch_hooks");
     const { result } = renderHook(() => useHttpPostTrigger());
 
     act(() => {

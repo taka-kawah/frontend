@@ -2,6 +2,7 @@ import { z } from "zod";
 import { useHttpPostTrigger } from "./util/fetch_hooks";
 import bcrypt from "bcryptjs";
 import { useEffect } from "react";
+import { setAuthToken } from "./util/local_storage";
 
 const authDomain = "auth.example.com";
 
@@ -18,7 +19,7 @@ export function useSendEmailAndPassword() {
     if (!resHeader || error) return;
     const authToken = resHeader.get("Authorization");
     if (authToken) {
-      localStorage.setItem("authToken", authToken);
+      setAuthToken(authToken);
     }
   }, [resHeader]);
 

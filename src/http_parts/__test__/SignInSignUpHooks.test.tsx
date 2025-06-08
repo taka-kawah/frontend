@@ -1,13 +1,14 @@
 import bcrypt from "bcryptjs";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import * as HttpHooks from "../util/fetch_hooks";
+import * as Storage from "../util/local_storage";
 import { renderHook } from "@testing-library/react";
 import { useSendEmailAndPassword } from "../SignInSignUpHooks";
 import { act } from "react";
 
 describe("useSendEmailAndPassword", () => {
   const mockPostTrigger = vi.fn();
-  const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
+  const setAuthTokenSpy = vi.spyOn(Storage, "setAuthToken");
   const hashSyncSpy = vi.spyOn(bcrypt, "hashSync");
 
   const mock = {
@@ -47,7 +48,7 @@ describe("useSendEmailAndPassword", () => {
       },
       expect.anything()
     );
-    expect(setItemSpy).toHaveBeenCalledWith("authToken", "Bearer test token");
+    expect(setAuthTokenSpy).toHaveBeenCalledWith("Bearer test token");
   });
 
   test("異常系: postTriggerからエラーが返ってきたときトークンがセットされない(トークンが返って来た時)", async () => {
@@ -77,7 +78,7 @@ describe("useSendEmailAndPassword", () => {
     );
     expect(result.current.error).not.toBeNull();
     expect(result.current.error?.message).toBe("test error");
-    expect(setItemSpy).not.toHaveBeenCalled();
+    expect(setAuthTokenSpy).not.toHaveBeenCalled();
   });
 
   test("異常系: postTriggerからエラーが返ってきたときトークンがセットされない(トークンが返って来ない時)", async () => {
@@ -106,6 +107,6 @@ describe("useSendEmailAndPassword", () => {
     );
     expect(result.current.error).not.toBeNull();
     expect(result.current.error?.message).toBe("test error");
-    expect(setItemSpy).not.toHaveBeenCalled();
+    expect(setAuthTokenSpy).not.toHaveBeenCalled();
   });
 });

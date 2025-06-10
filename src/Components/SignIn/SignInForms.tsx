@@ -20,15 +20,12 @@ export function SignInForms(): JSX.Element {
   };
 
   return (
-    <div id="email-pass-signin" className="space-y-12 bg-cyan-100 rounded-4xl">
-      <p
-        id="title"
-        className="font-bold text-2xl flex justify-center p-4 text-gray-600"
-      >
+    <div id="email-pass-signin" className="justify-items-center space-y-1">
+      <p id="title" className="font-bold text-2xl p-4 text-gray-600">
         メールアドレスでログイン
       </p>
-      <div id="forms" className="space-y-6">
-        <div id="emailForm" className="space-y-2 p-8">
+      <div id="forms">
+        <div id="emailForm" className="px-8">
           <label className="block tracking-wide text-base text-gray-600">
             メールアドレス
           </label>
@@ -44,13 +41,10 @@ export function SignInForms(): JSX.Element {
             {isValidEmail(email) ? "" : cautions.email}
           </p>
         </div>
-        <div id="passwordForm" className="space-y-2 p-8">
+        <div id="passwordForm" className="px-8">
           <label className="block tracking-wide text-base text-gray-600">
             パスワード
           </label>
-          <p className="text-sm text-gray-500/100 w-70">
-            最低8文字、1つ以上の大文字、1つ以上の数字を含むパスワードを入力してください。
-          </p>
           <input
             type="password"
             required
@@ -64,15 +58,12 @@ export function SignInForms(): JSX.Element {
           </p>
         </div>
       </div>
-      <div
-        id="errorMassage"
-        className="text-red-500 h-5 text-2xl flex justify-center"
-      >
-        <p>{error ? `⚠️${error.message}` : ""}</p>
+      <div id="errorMassage" className="text-red-500 h-5 text-xl">
+        <p>{error ? `${error.message}` : ""}</p>
       </div>
-      <div className="flex justify-center items-end pb-8">
+      <div className="pt-5">
         {loading ? (
-          <div className="flex justify-center" id="loading">
+          <div className="" id="loading">
             <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
           </div>
         ) : (

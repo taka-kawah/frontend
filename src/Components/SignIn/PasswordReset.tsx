@@ -2,7 +2,7 @@ import React, { useState, type JSX } from "react";
 import "../../App.css";
 import { cautions, isValidEmail } from "./validation";
 
-export function SignUpForms(): JSX.Element {
+export function ResetPasswordForms(): JSX.Element {
   const [email, setEmail] = useState("");
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -13,14 +13,14 @@ export function SignUpForms(): JSX.Element {
       className="justify-items-center bg-cyan-100 rounded-4xl"
     >
       <p id="title" className="font-bold text-2xl p-4 text-gray-600">
-        アカウント新規登録
+        パスワードをリセット
       </p>
       <div className="text-gray-500 justify-items-center px-8 py-2 text-sm">
-        <p>登録するメールアドレスを入力してください。</p>
+        <p>アカウントに登録されたメールアドレスを入力してください。</p>
         <p>送信されたメール内のリンクから、</p>
-        <p>アカウント登録をしてください。</p>
+        <p>パスワードのリセットを行ってください。</p>
       </div>
-      <div id="forms">
+      <div id="forms" className="">
         <label className="block tracking-wide text-base text-gray-600">
           メールアドレス
         </label>
@@ -40,10 +40,10 @@ export function SignUpForms(): JSX.Element {
       <div className="items-end pt-4">
         <button
           className="bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl transition delay-150 duration-200 hover:bg-blue-500 hover:scale-110 disabled:bg-blue-300"
-          onClick={() => console.log("signup!", email)}
+          onClick={() => console.log("reset!", email)}
           disabled={!isValidEmail(email) || email === ""}
         >
-          新規登録メールを送る
+          リセットメールを送信する
         </button>
       </div>
     </div>

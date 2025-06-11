@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ZodSchema } from "zod";
+import { set } from "zod/v4";
 
 export function useHttpGet<T>(
   domain: string,
@@ -7,6 +8,7 @@ export function useHttpGet<T>(
   schema: ZodSchema<T>,
   authToken?: string
 ) {
+  const [ok, setOk] = useState<boolean>(false);
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -16,6 +18,7 @@ export function useHttpGet<T>(
     if (!domain) return;
     httpGet(domain, path, authToken)
       .then((response) => {
+        setOk(response.ok);
         setResHeader(response.headers);
         return response.json();
       })
@@ -36,7 +39,7 @@ export function useHttpGet<T>(
       });
   }, [domain, path]);
 
-  return { data, error, loading, resHeader };
+  return { ok, data, error, loading, resHeader };
 }
 
 export function useHttpPost<T>(
@@ -46,6 +49,7 @@ export function useHttpPost<T>(
   schema: ZodSchema<T>,
   authToken?: string
 ) {
+  const [ok, setOk] = useState<boolean>(false);
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,6 +59,7 @@ export function useHttpPost<T>(
     if (!domain) return;
     httpPost(domain, path, payload, authToken)
       .then((response) => {
+        setOk(response.ok);
         setResHeader(response.headers);
         return response.json();
       })
@@ -75,10 +80,11 @@ export function useHttpPost<T>(
       });
   }, [domain, path, payload]);
 
-  return { data, error, loading, resHeader };
+  return { ok, data, error, loading, resHeader };
 }
 
 export function useHttpGetTrigger<T>() {
+  const [ok, setOk] = useState<boolean>(false);
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -93,6 +99,7 @@ export function useHttpGetTrigger<T>() {
     try {
       setLoading(true);
       const response = await httpGet(domain, path, authToken);
+      setOk(response.ok);
       setResHeader(response.headers);
       const json = await response.json();
       const result = schema.safeParse(json);
@@ -108,10 +115,11 @@ export function useHttpGetTrigger<T>() {
     }
   };
 
-  return { getTrigger, data, error, loading, resHeader };
+  return { getTrigger, ok, data, error, loading, resHeader };
 }
 
 export function useHttpPostTrigger<T>() {
+  const [ok, setOk] = useState<boolean>(false);
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -127,6 +135,7 @@ export function useHttpPostTrigger<T>() {
     try {
       setLoading(true);
       const response = await httpPost(domain, path, payload, authToken);
+      setOk(response.ok);
       setResHeader(response.headers);
       const json = await response.json();
       const result = schema.safeParse(json);
@@ -142,7 +151,7 @@ export function useHttpPostTrigger<T>() {
     }
   };
 
-  return { postTrigger, data, error, loading, resHeader };
+  return { postTrigger, ok, data, error, loading, resHeader };
 }
 
 async function httpGet(

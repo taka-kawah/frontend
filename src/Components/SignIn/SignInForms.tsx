@@ -2,6 +2,7 @@ import React, { useState, type JSX } from "react";
 import "../../App.css";
 import { cautions, isValidEmail, isValidPassword } from "./validation";
 import { useSendEmailAndPassword } from "../../http_parts/SignInSignUpHooks";
+import { CustomButton, ErrorBar } from "../util";
 
 export function SignInForms(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -58,28 +59,19 @@ export function SignInForms(): JSX.Element {
           </p>
         </div>
       </div>
-      <div id="errorMassage" className="text-red-500 h-5 text-xl">
-        <p>{error ? `${error.message}` : ""}</p>
-      </div>
+      <ErrorBar err={error} />
       <div className="pt-5">
-        {loading ? (
-          <div className="" id="loading">
-            <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
-          </div>
-        ) : (
-          <button
-            className="bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl transition delay-150 duration-200 hover:bg-blue-500 hover:scale-110 disabled:bg-blue-300"
-            onClick={handleLogin}
-            disabled={
-              !isValidEmail(email) ||
-              !isValidPassword(password) ||
-              email === "" ||
-              password === ""
-            }
-          >
-            ログイン
-          </button>
-        )}
+        <CustomButton
+          label="ログイン"
+          onClick={handleLogin}
+          disabled={
+            !isValidEmail(email) ||
+            !isValidPassword(password) ||
+            email === "" ||
+            password === ""
+          }
+          loading={loading}
+        />
       </div>
     </div>
   );

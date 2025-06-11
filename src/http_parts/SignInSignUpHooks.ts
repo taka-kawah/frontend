@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useHttpPostTrigger } from "./util/fetch_hooks";
+import { useHttpGetTrigger, useHttpPostTrigger } from "./util/fetch_hooks";
 import bcrypt from "bcryptjs";
 import { useEffect } from "react";
 import { setAuthToken } from "./util/local_storage";
@@ -7,7 +7,8 @@ import { setAuthToken } from "./util/local_storage";
 const authDomain = "auth.example.com";
 
 export function useSendEmailAndPassword() {
-  const { postTrigger, error, loading, resHeader } = useHttpPostTrigger<{}>();
+  const { postTrigger, ok, error, loading, resHeader } =
+    useHttpPostTrigger<{}>();
 
   const sendEmailAndPassword = async (email: string, password: string) => {
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -23,5 +24,30 @@ export function useSendEmailAndPassword() {
     }
   }, [resHeader]);
 
-  return { sendEmailAndPassword, error, loading };
+  return { sendEmailAndPassword, ok, error, loading };
+}
+
+export function useSendEmailForSignUp() {
+  const { getTrigger, ok, error, loading } = useHttpGetTrigger<{}>();
+
+  const sendEmailForSignUp = async (email: string) => {
+    getTrigger(authDomain, `/mail?email=${email}`, z.object({}).strict());
+  };
+
+  return { sendEmailForSignUp, ok, error, loading };
+}
+
+export function useResetPasswordEmail() {
+  const { postTrigger, ok, error, loading } = useHttpPostTrigger<{}>();
+
+  const resetPasswordEmail = async (email: string) => {
+    postTrigger(
+      authDomain,
+      "/reset-password?email=${email}",
+      { MailAddress: email },
+      z.object({}).strict()
+    );
+  };
+
+  return { resetPasswordEmail, ok, error, loading };
 }

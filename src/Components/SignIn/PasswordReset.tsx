@@ -1,11 +1,18 @@
 import React, { useState, type JSX } from "react";
 import "../../App.css";
 import { cautions, isValidEmail } from "./validation";
+import { CustomButton, ErrorBar } from "../util";
+import { useResetPasswordEmail } from "../../http_parts/SignInSignUpHooks";
 
 export function ResetPasswordForms(): JSX.Element {
   const [email, setEmail] = useState("");
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
+  };
+
+  const { resetPasswordEmail, error, loading } = useResetPasswordEmail();
+  const handleClick = () => {
+    resetPasswordEmail(email);
   };
   return (
     <div
@@ -37,14 +44,14 @@ export function ResetPasswordForms(): JSX.Element {
           {isValidEmail(email) ? "" : cautions.email}
         </p>
       </div>
+      <ErrorBar err={error} />
       <div className="items-end pt-4">
-        <button
-          className="bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl transition delay-150 duration-200 hover:bg-blue-500 hover:scale-110 disabled:bg-blue-300"
-          onClick={() => console.log("reset!", email)}
+        <CustomButton
+          label="リセットメールを送信する"
+          onClick={handleClick}
           disabled={!isValidEmail(email) || email === ""}
-        >
-          リセットメールを送信する
-        </button>
+          loading={loading}
+        />
       </div>
     </div>
   );

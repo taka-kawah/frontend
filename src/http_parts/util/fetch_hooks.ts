@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { ZodSchema } from "zod";
-import { set } from "zod/v4";
 
 export function useHttpGet<T>(
   domain: string,
@@ -37,7 +36,7 @@ export function useHttpGet<T>(
         setError(error);
         setLoading(false);
       });
-  }, [domain, path]);
+  }, [domain, path, schema, authToken]);
 
   return { ok, data, error, loading, resHeader };
 }
@@ -78,7 +77,7 @@ export function useHttpPost<T>(
         setError(error);
         setLoading(false);
       });
-  }, [domain, path, payload]);
+  }, [domain, path, payload, authToken, schema]);
 
   return { ok, data, error, loading, resHeader };
 }

@@ -22,7 +22,7 @@ export function useSendEmailAndPassword() {
     if (authToken) {
       setAuthToken(authToken);
     }
-  }, [resHeader]);
+  }, [resHeader, error]);
 
   return { sendEmailAndPassword, ok, error, loading };
 }

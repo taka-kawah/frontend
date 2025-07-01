@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { useEffect } from "react";
 import { setAuthToken } from "./util/local_storage";
 
-const authDomain = "auth.example.com";
+const authDomain = "http://auth-server.auth.svc.cluster.local:8000";
 
 export function useSendEmailAndPassword() {
   const { postTrigger, ok, error, loading, resHeader } =

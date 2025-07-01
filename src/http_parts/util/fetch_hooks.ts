@@ -159,8 +159,9 @@ async function httpGet(
   path: string,
   authToken?: string
 ): Promise<Response> {
-  console.log(`GET from: https://${domain}${path}`);
-  const response = await fetch(`https://${domain}${path}`, {
+  const endPoint = `${domain}${path}`;
+  console.log(`GET from: ${endPoint}`);
+  const response = await fetch(endPoint, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -181,8 +182,9 @@ async function httpPost(
   payload: any,
   authToken?: string
 ) {
-  console.log(`POST to: https://${domain}${path}`);
-  const response = await fetch(`https://${domain}${path}`, {
+  const endPoint = `${domain}${path}`;
+  console.log(`POST to: ${endPoint}`);
+  const response = await fetch(endPoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

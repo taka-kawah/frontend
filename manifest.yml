@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  type: NodePort
+  ports:
+  - port: 5173
+    name: http
+  selector:
+    app: vite-app
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vite-app
+  labels:
+    app: vite-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vite-app
+  template:
+    metadata:
+      labels:
+        app: vite-app
+    spec:
+      containers:
+      - name: vite-app
+        image: geaa/frontend-vite:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5173
+        env:
+        - name: VITE_GOOGLE_CLINET_ID
+          value: 979806019666-3c3piapet3d4mb6k8bgrbqvjsk7kt322.apps.googleusercontent.com
+        - name: CHOKIDAR_USEPOLLING
+          value: "true"
